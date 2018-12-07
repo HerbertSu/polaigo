@@ -29,7 +29,7 @@ class LoadingComponent extends Component {
     render() {
         const spin = this.spinValue.interpolate({
             inputRange : [0, 1],
-            outputRange : ['0deg', '360deg']
+            outputRange : ['0deg', '-360deg']
         })
         return (
             <View style={styles.container}>
