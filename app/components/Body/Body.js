@@ -8,6 +8,7 @@ import Spring from '../Spring/Spring';
 import ParallelAnimation from '../ParallelAnimation/ParallelAnimation';
 import SequenceAnimation from '../SequenceAnimation/SequenceAnimation';
 import StaggerAnimation from '../StaggerAnimation/StaggerAnimation';
+import Swipeable from '../Swipeable/Swipeable';
 
 class Body extends Component {
     constructor(props){
@@ -31,6 +32,11 @@ class Body extends Component {
             ["Senator Doe voted NO on Bill HR102","Tags: Police"],
             ["Senator Doe voted NO on Bill HR103","Tags: Military Spending"],
         ]
+        const listData = [
+            {key: '1. element'},
+            {key: '2. element'},
+            {key: '3. element'},
+        ]
         return (
             // <ScrollView showVerticalScrollIndicator={false} style={styles.container}>
             //     <Newsfeed newsfeed={dummyFeed}/>
@@ -43,7 +49,11 @@ class Body extends Component {
                 {/* <Spring/> */}
                 {/* <ParallelAnimation/> */}
                 {/* <SequenceAnimation/> */}
-                <StaggerAnimation/>
+                {/* <StaggerAnimation/> */}
+                <Swipeable data={listData}/>
+                <Text style={{color: 'white'}}>
+                    Hi
+                </Text>
             </ScrollView>
             // </View>
     );
