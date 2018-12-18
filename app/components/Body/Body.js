@@ -3,16 +3,22 @@ import { AppRegistry, ScrollView, View, Image, Text, Button} from 'react-native'
 import {styles} from './styles';
 import Newsfeed from '../Newsfeed/Newsfeed';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
+import Swipeable from '../Swipeable/Swipeable';
 
 
 class Body extends Component {
     constructor(props){
         super(props);
         this.state = {
-            
+            enable: true,
         }
     }
-    
+    setScrollEnabled(enable) {
+        this.setState({
+          enable,
+        });
+      }
+
     render() {
         let dummyFeed = [
             ["Senator Doe voted YES on Bill HR101","Summary: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Tags: Education and Youth"],
@@ -32,7 +38,8 @@ class Body extends Component {
             //     <Newsfeed newsfeed={dummyFeed}/>
             // </ScrollView>
             <View style={styles.container}>
-                <LoadingComponent/>
+                {/* <LoadingComponent/> */}
+                <Swipeable setScrollEnabled={enable => this.setScrollEnabled(enable)}/>
             </View>
     );
     } 
