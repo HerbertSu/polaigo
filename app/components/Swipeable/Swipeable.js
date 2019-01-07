@@ -3,7 +3,6 @@ import { Dimensions, AppRegistry, PanResponder, FlatList, Text, View, Image, Ani
 import {styles} from './styles';
 
 
-
 {/* <ListItem
     text={item.key}
     success={this.success}
@@ -41,15 +40,16 @@ class Swipeable extends Component {
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onPanResponderTerminationRequest: (evt, gestureState) => false,
             onPanResponderMove: (evt, gestureState) => {
-                
+                const currentPosition = position.x;
                 if (gestureState.dx > 35){
                     this.setScrollViewEnabled(false);
-                    let newX = gestureState.dx + this.gestureDelay;
+                    let newX = currentPosition + gestureState.dx + this.gestureDelay;
+                    // if (newX instanceOf String){}
                     position.setValue({ x: newX, y: 0});
                 }
                 else if (gestureState.dx < -35){
                     this.setScrollViewEnabled(false);
-                    let newX = gestureState.dx + this.gestureDelay;
+                    let newX = currentPosition + gestureState.dx - this.gestureDelay;
                     position.setValue({ x: newX, y: 0})
                     console.log("position in -35", position)
                 }
@@ -94,8 +94,10 @@ class Swipeable extends Component {
                         }).start(() => {
                             this.setScrollViewEnabled(true)
                         })
+                        console.log("running right < 150")
                     } 
                     else if(gestureState.dx > 0){
+                        console.log("running right > 150")
                         this.opinion = 0;
                         Animated.timing(this.state.position, {
                             toValue: {x: 0, y: 0},
