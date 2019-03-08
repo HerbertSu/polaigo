@@ -4,7 +4,7 @@ import {styles} from './styles';
 import Newsfeed from '../Newsfeed/Newsfeed';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 import Swipeable from '../Swipeable/Swipeable';
-
+import Form from '../Form/Form';
 
 class Body extends Component {
     constructor(props){
@@ -38,8 +38,9 @@ class Body extends Component {
             //     <Newsfeed newsfeed={dummyFeed}/>
             // </ScrollView>
             <View style={styles.container}>
+                <Form/>
                 {/* <LoadingComponent/> */}
-                <Swipeable setScrollEnabled={enable => this.setScrollEnabled(enable)}/>
+                {/* <Swipeable setScrollEnabled={enable => this.setScrollEnabled(enable)}/> */}
             </View>
     );
     } 
