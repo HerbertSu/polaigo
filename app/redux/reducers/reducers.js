@@ -1,12 +1,17 @@
-const initialState = {
-    textInput : '',
-};
+import {combineReducers} from 'redux';
 
-export const logTextInput = (state = initialState, action = {}) => {
-    switch(action.type){
-        case 'CHANGE_TEXT_INPUT_FIELD':
-            return Object.assign({}, state, {textInput : action.payload});
-        default:
-            return state;
-    }
-}
+import {
+    updateAddressLine1,
+    updateAddressLine2,
+    updateCity,
+    updateZipCode,
+    updateState
+} from './locationFormReducers';
+
+export default combineReducers({
+    addressLine1Reducer : updateAddressLine1,
+    addressLine2Reducer : updateAddressLine2,
+    cityReducer : updateCity,
+    zipCodeReducer : updateZipCode,
+    stateReducer : updateState
+})
