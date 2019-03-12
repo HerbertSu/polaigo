@@ -14,6 +14,8 @@ import { MAX_ADDRESS_LENGTH,
 import * as locationFormActions from '../../redux/actions/locationFormActions';
 
 
+//TODO: Log into google developers page to check out civic info api pings.
+
 const mapStateToProps = (state) => {
     return {
         addressLine1 : state.addressLine1Reducer,
@@ -56,14 +58,16 @@ class Form extends Component {
         this.props.updateState(event);
     }
 
-    fetchHRRepresentativeFromLocation = () => {
-        return axios.get("https://jsonplaceholder.typicode.com/users/1")
+    fetchHRRepresentativeFromLocation = async () => {
+
+        return await axios.post("http://localhost:3000/getRepresentativesFromLocation", JSON.stringify({
+            addressLine1 : this.props.addressline1,
+            addressLine2 : this.props.addressLine2,
+            city : this.props.city,
+            state : this.props.st,
+            zipCode : this.props.zipCode
+        }))
             .then(json => {
-                this.setState = {
-                    isLoading : false,
-                    loaded : true,
-                    data : json,
-                }
                 console.log(json)
             })
             .catch(error=>{
