@@ -15,16 +15,18 @@ import {
 } from '../../constants/regex';
 
 import * as locationFormActions from '../../redux/actions/locationFormActions';
+import * as homeActions from '../../redux/actions/homeActions';
 
 
 const mapStateToProps = (state) => {
     return {
-        addressLine1 : state.addressLine1Reducer,
-        addressLine2 : state.addressLine2Reducer,
-        city : state.cityReducer,
-        zipCode : state.zipCodeReducer,
-        st : state.stateReducer,
+        addressLine1 : state.addressLine1Reducer.addressLine1,
+        addressLine2 : state.addressLine2Reducer.addressLine2,
+        city : state.cityReducer.city,
+        zipCode : state.zipCodeReducer.zipCode,
+        st : state.stateReducer.state,
         myHRRepresentative : state.myHRRepresentativeReducer,
+        isLoading : state.setShowFormReducer.isLoading,
     };
 }
 
@@ -36,6 +38,8 @@ const mapDispatchToProps = (dispatch) => {
         updateZipCode : (text) => dispatch(locationFormActions.updateZipCodeAction(text)),
         updateState : (text) => dispatch(locationFormActions.updateStateAction(text)),
         updateHRRepresentative : (object) => dispatch(locationFormActions.updateHRRepresentativeAction(object)),
+        setIsLoading : (boolean) => dispatch(homeActions.setIsLoadingAction(boolean)),
+        setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
     }
 }
 
@@ -62,49 +66,53 @@ class Form extends Component {
         this.props.updateState(event);
     }
 
-    checkAddressLine1Entry = () => {
-        if(EMPTY_OR_WHITESPACE.test(this.props.addressLine1)){
-            return false;
-        }
-        return true;
-    }
+    //BUG: Detects spaces even if values are given, e.g. 'El Cerrito' throws an error. Need EMPTY and JUST whitespaces
+    // checkAddressLine1Entry = () => {
+    //     if(EMPTY_OR_WHITESPACE.test(this.props.addressLine1)){
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
-    checkCityEntry = () => {
-        if(EMPTY_OR_WHITESPACE.test(this.props.city)){
-            return false;
-        }
-        return true;
-    }
+    // checkCityEntry = () => {
+    //     if(EMPTY_OR_WHITESPACE.test(this.props.city)){
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
-    checkStateEntry = () => {
-        if(EMPTY_OR_WHITESPACE.test(this.props.st)){
-            return false;
-        }
-        return true;
-    }   
+    // checkStateEntry = () => {
+    //     if(EMPTY_OR_WHITESPACE.test(this.props.st)){
+    //         return false;
+    //     }
+    //     return true;
+    // }   
 
     fetchHRRepresentativeFromLocation = async () => {
         //Given IP is computer's
         const server = "http://192.168.1.76:3000";
         const endpoint = "/getRepresentativesFromLocation";
 
-        if(
-            this.checkAddressLine1Entry() ||
-            this.checkCityEntry() ||
-            this.checkStateEntry()
-        ){
-            console.log("Empty entries detected.")
-            return;
-        }
+        this.props.setIsLoading(true);
+        this.props.setShowForm(false);
+
+        // if(
+        //     this.checkAddressLine1Entry() ||
+        //     this.checkCityEntry() ||
+        //     this.checkStateEntry()
+        // ){
+        //     console.log("Empty entries detected.")
+        //     return;
+        // }
 
         return fetch(`${server}${endpoint}`, {
             method : 'POST',
             body : JSON.stringify({
-                addressLine1 : this.props.addressLine1["addressLine1"],
-                addressLine2 : this.props.addressLine2["addressLine2"],
-                city : this.props.city["city"],
-                state : this.props.st["state"],
-                zipCode : this.props.zipCode["zipCode"]
+                addressLine1 : this.props.addressLine1,
+                addressLine2 : this.props.addressLine2,
+                city : this.props.city,
+                state : this.props.st,
+                zipCode : this.props.zipCode
             }),
             headers : {
                 'Content-Type' : 'application/json'
@@ -113,12 +121,13 @@ class Form extends Component {
         .then(response => response.json())
         .then(response => {
             this.props.updateHRRepresentative(response);
+            this.props.setIsLoading(false);
+            this.props.setShowHRRep(true);
         })
         .catch(error => {
             console.log("Error in fetchHRRepresentativeFromLocation in Form.js.", error);
             throw error;
         })
-        this.props.flipShowForm()
     }
 
     render() {

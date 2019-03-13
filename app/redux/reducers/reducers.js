@@ -10,7 +10,9 @@ import {
 } from './locationFormReducers';
 
 import {
-    flipShowForm,
+    setIsLoading, 
+    setShowForm,
+    setShowHRRep,
 } from './homeReducers';
 
 export default combineReducers({
@@ -20,5 +22,7 @@ export default combineReducers({
     zipCodeReducer : updateZipCode,
     stateReducer : updateState,
     myHRRepresentativeReducer : updateHRRepresentative,
-    flipShowFormReducer : flipShowForm,
+    setShowFormReducer : setShowForm,
+    setIsLoadingReducer : setIsLoading,
+    setShowHRRepReducer : setShowHRRep,
 })
