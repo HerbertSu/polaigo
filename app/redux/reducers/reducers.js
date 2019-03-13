@@ -5,13 +5,24 @@ import {
     updateAddressLine2,
     updateCity,
     updateZipCode,
-    updateState
+    updateState,
+    updateHRRepresentative,
 } from './locationFormReducers';
+
+import {
+    setIsLoading, 
+    setShowForm,
+    setShowHRRep,
+} from './homeReducers';
 
 export default combineReducers({
     addressLine1Reducer : updateAddressLine1,
     addressLine2Reducer : updateAddressLine2,
     cityReducer : updateCity,
     zipCodeReducer : updateZipCode,
-    stateReducer : updateState
+    stateReducer : updateState,
+    myHRRepresentativeReducer : updateHRRepresentative,
+    setShowFormReducer : setShowForm,
+    setIsLoadingReducer : setIsLoading,
+    setShowHRRepReducer : setShowHRRep,
 })

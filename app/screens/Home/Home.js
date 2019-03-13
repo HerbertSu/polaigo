@@ -1,36 +1,85 @@
 import React, { Component } from 'react';
-import { View, } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
+
+import {connect} from 'react-redux';
+
+import * as homeActions from '../../redux/actions/homeActions';
+
+import {styles} from './styles';
+import { Button } from 'react-native-elements';
+
 
 import NavigationBar from '../../components/NavigationBar/NavigationBar';
 import Body from '../../components/Body/Body';
 import Form from '../../components/Form/Form';
 
-import {styles} from './styles';
+const mapStateToProps = (state) => {
+    return {
+        showForm : state.setShowFormReducer.showForm,
+        isLoading : state.setIsLoadingReducer.isLoading,
+        showHRRep : state.setShowHRRepReducer.showHRRep,
+    };
+}
 
-export default class Home extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-
-        }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
+        setShowHRRep : (boolean) => dispatch(homeActions.setShowHRRepAction(boolean)),
     }
+}
+
+class Home extends Component {
+
     render() {
-      return (
-        <View style={styles.container}>
-            {/* <View style={styles.component}>
-                <NavigationBar componentNamesList={["Home", "Page1", "Page2"]}/>
-            </View>
-            <View style={styles.content}>
-                <Body/>
-            </View>
-            <View style={styles.component}>
-                <View style={styles.bottomNavigationBar}>
-                    <NavigationBar componentNamesList={["MyReps", "Home", "Contact","Learn"]}/>
+        if(this.props.showForm){
+            return (
+                <View style={styles.container}>
+                    <Form setShowHRRep={this.props.setShowHRRep} setShowForm={this.props.setShowForm} showForm={this.props.showForm}/>
                 </View>
-            </View> */}
-            <Form/>
-        </View>
-    );
+            );
+        } else if(this.props.isLoading){
+            return(
+                <View>
+                    <ActivityIndicator/>
+                </View>
+            )
+        // } else if(this.state.showRep){
+        //     return(
+        //         <Text style={styles.container}>
+        //             Stuff
+        //         </Text>
+        //     )
+        } else if(this.props.showHRRep){
+            return (
+                <View style={styles.container}>
+                    <Text>
+                        HELLLLOOOO
+                    </Text>
+                </View>
+            )
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Text>
+                        Hi
+                    </Text>
+                    <Button title="Find My Representive" onPress={()=>this.props.setShowForm(true)}/>
+                    {/* <View style={styles.component}>
+                        <NavigationBar componentNamesList={["Home", "Page1", "Page2"]}/>
+                    </View>
+                    <View style={styles.content}>
+                        <Body/>
+                    </View>
+                    <View style={styles.component}>
+                        <View style={styles.bottomNavigationBar}>
+                            <NavigationBar componentNamesList={["MyReps", "Home", "Contact","Learn"]}/>
+                        </View>
+                    </View> */}
+                </View>
+                
+            )
+        }
   }
 }
 
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
