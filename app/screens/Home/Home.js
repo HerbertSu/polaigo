@@ -13,7 +13,8 @@ import NavigationBar from '../../components/NavigationBar/NavigationBar';
 import Body from '../../components/Body/Body';
 import Form from '../../components/Form/Form';
 
-
+//TODO Add state value to show representative information when loaded.
+//TODO Use redux-promise-middleware to show loading screens.
 
 
 const mapStateToProps = (state) => {
