@@ -32,3 +32,10 @@ export const updateStateAction = (text) => {
         payload : text
     };
 };
+
+export const updateHRRepresentativeAction = (object) => {
+    return {
+        type : 'UPDATE_HR_REPRESENTATIVE',
+        payload : object
+    };
+};

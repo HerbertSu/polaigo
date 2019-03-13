@@ -42,3 +42,22 @@ export const updateState = (state = {state : ''}, action = {}) => {
             return state;
     }
 }
+
+const initialHRRepresentativeState = {
+    empty : true,
+    bioguideid : '',
+    firstname : '',
+    lastname : '',
+    party : '',
+    state : '',
+};
+
+export const updateHRRepresentative = (state = initialHRRepresentativeState, action) => {
+    switch(action.type){
+        case 'UPDATE_HR_REPRESENTATIVE' : {
+            return {...state, ...action.payload, empty: false};
+        } default : {
+            return state;
+        }
+    }
+}
