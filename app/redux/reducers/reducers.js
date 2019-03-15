@@ -15,6 +15,10 @@ import {
     setShowHRRep,
 } from './homeReducers';
 
+import {
+    setShowVotes,
+} from './representativeReducers';
+
 export default combineReducers({
     addressLine1Reducer : updateAddressLine1,
     addressLine2Reducer : updateAddressLine2,
@@ -25,4 +29,5 @@ export default combineReducers({
     setShowFormReducer : setShowForm,
     setIsLoadingReducer : setIsLoading,
     setShowHRRepReducer : setShowHRRep,
+    setShowVotesReducer : setShowVotes,
 })

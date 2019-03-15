@@ -12,6 +12,7 @@ import { Button } from 'react-native-elements';
 import NavigationBar from '../../components/NavigationBar/NavigationBar';
 import Body from '../../components/Body/Body';
 import Form from '../../components/Form/Form';
+import Representative from '../../components/Representative/Representative';
 
 const mapStateToProps = (state) => {
     return {
@@ -43,27 +44,17 @@ class Home extends Component {
                     <ActivityIndicator/>
                 </View>
             )
-        // } else if(this.state.showRep){
-        //     return(
-        //         <Text style={styles.container}>
-        //             Stuff
-        //         </Text>
-        //     )
         } else if(this.props.showHRRep){
             return (
                 <View style={styles.container}>
-                    <Text>
-                        HELLLLOOOO
-                    </Text>
+                    <Representative/>
                 </View>
             )
         } else {
             return (
                 <View style={styles.container}>
-                    <Text>
-                        Hi
-                    </Text>
                     <Button title="Find My Representive" onPress={()=>this.props.setShowForm(true)}/>
+                    <Button title="Show Representative" onPress={()=>this.props.setShowHRRep(true)}/>
                     {/* <View style={styles.component}>
                         <NavigationBar componentNamesList={["Home", "Page1", "Page2"]}/>
                     </View>
