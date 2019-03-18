@@ -4,3 +4,10 @@ export const setShowVotesAction = (boolean) => {
         payload : boolean
     };
 };
+
+export const updateHRRepVoteHistoryAction = (voteHistoryArray) => {
+    return {
+        type : 'UPDATE_HR_REP_VOTE_HISTORY',
+        payload : voteHistoryArray
+    };
+};

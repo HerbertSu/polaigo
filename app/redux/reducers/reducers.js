@@ -17,6 +17,7 @@ import {
 
 import {
     setShowVotes,
+    updateHRRepVoteHistory,
 } from './representativeReducers';
 
 export default combineReducers({
@@ -30,4 +31,5 @@ export default combineReducers({
     setIsLoadingReducer : setIsLoading,
     setShowHRRepReducer : setShowHRRep,
     setShowVotesReducer : setShowVotes,
-})
+    updateHRRepVoteHistoryReducer : updateHRRepVoteHistory,
+});

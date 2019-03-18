@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { ScrollView, View, Image, Text, Dimensions} from 'react-native';
+import { FlatList, View, Image, Text, Dimensions} from 'react-native';
 
-import { Button } from 'react-native-elements';
+import { Button, ListItem } from 'react-native-elements';
 
 import * as representativeActions from '../../redux/actions/representativeActions';
+import * as homeActions from '../../redux/actions/homeActions';
+
+import {dateify} from '../../../lib/scripts';
 
 import {styles} from './styles';
 
 const mapStateToProps = (state) => {
     return {
         showVotes : state.setShowVotesReducer.showVotes,
+        myHRRepresentative : state.myHRRepresentativeReducer,
+        representativeHRVoteHistory : state.updateHRRepVoteHistoryReducer.representativeHRVoteHistory,
+
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setShowVotes : (boolean) => dispatch(representativeActions.setShowVotesAction(boolean)),
+        setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
+        setShowHRRep : (boolean) => dispatch(homeActions.setShowHRRepAction(boolean)),
+        setIsLoading : (boolean) => dispatch(homeActions.setIsLoadingAction(boolean)),
+        updateHRRepVoteHistory : (voteHistoryArray) => dispatch(representativeActions.updateHRRepVoteHistoryAction(voteHistoryArray)),
+
     };
 };
 
@@ -37,20 +48,51 @@ const votes = (voteHistory, firstname, lastname) => {
         </Text>)
     });
     return voteComponent;
-}
+};
+
 
 class Representative extends Component {
+    fetchHRRepresentativeVoteHistoryFull = async (bioguideid) => {
+        const server = "http://192.168.1.76:3000";
+        const endpoint = "/get-hr-rep-vote-history-active-full";
+        
+        this.props.setIsLoading(true);
+        this.props.setShowHRRep(false);
+    
+        return fetch(`${server}${endpoint}`, {
+            method : 'POST',
+            body : JSON.stringify({
+                bioguideid : this.props.myHRRepresentative.bioguideid
+            }),
+            headers : {
+                'Content-Type' : 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(response => {
+            this.props.setShowHRRep(true);
+            this.props.setIsLoading(false);
+            this.props.updateHRRepVoteHistory(response);
+            this.props.setShowVotes(true);
+        })
+        .catch(error => {
+            console.log("fetchHRRepresentativeVoteHistoryFull() has failed in Representative.js.", error);
+            throw error;
+        });
+    };
 
+    renderSeparator = () => {
+        return <View 
+            style={{
+                height: 1,
+                width : '85%',
+                backgroundColor : '#000070',
+            }}
+        />
+    }
     render() {
         const {height, width} = Dimensions.get('screen');
-
-        const rep = {
-            "bioguideid": "D000623",
-            "firstname": "Mark",
-            "lastname": "DeSaulnier",
-            "state": "CA",
-            "party": "D"
-        };
+        const rep = this.props.myHRRepresentative;
         if(!this.props.showVotes){
             return (
                 <View style={styles.container}>
@@ -62,407 +104,41 @@ class Representative extends Component {
                     <Text style={styles.text}>
                         Your Representative is {rep.firstname} {rep.lastname} [{rep.party}].
                     </Text>
-                    
-                    
-                    <Button title={`Retrieve ${rep.lastname}'s Vote History`} onPress={()=>{this.props.setShowVotes(true)}}/>
+
+                    <Button title={`Retrieve ${rep.lastname}'s Vote History`} onPress={() => this.fetchHRRepresentativeVoteHistoryFull(this.props.myHRRepresentative.bioguideid)}/>
                     
                 </View>
             );
         } else if (this.props.showVotes){
             return (    
-                <ScrollView>
-                        {votes(voteHistory, rep.firstname, rep.lastname)}
-                </ScrollView>
+                <View>
+                    <FlatList  
+                        data={this.props.representativeHRVoteHistory}
+                        renderItem={({item}) => {
+                            let date = dateify(item.date);
+                            return <ListItem
+                                title={`Term ${item.congressterm} | Session ${item.session} | Roll ${item.roll}`}
+                                subtitle={
+                                    <View style={styles.subtitleView}>
+                                        <Text>Vote Issue : {item.issue} </Text>
+                                        <Text>Vote Question : {item.question} </Text>
+                                        <Text>Vote Date : {`${date.month}/${date.day}/${date.year}`} </Text>
+                                        <Text> Rep. {this.props.myHRRepresentative.lastname} voted 
+                                            <Text style={styles.voted}>
+                                                {` ${item.voted}`}
+                                            </Text>.
+                                        </Text>
+                                    </View>
+                                }
+                            />
+                        }}
+                        keyExtractor={item=>`${item.congressterm}_${item.session}_${item.roll}`}
+                        ItemSeparatorComponent={this.renderSeparator}
+                    />
+                </View>
             );
-        };
-        
-    } 
-}
+        };  
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Representative);
-
-
-const voteHistory = [
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "001",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "QUORUM",
-        "question": "Call by States",
-        "voted": "Present"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "002",
-        "result": "Pelosi",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "",
-        "question": "Election of the Speaker",
-        "voted": "McCarthy"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "003",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H RES 5",
-        "question": "On Motion to Table the Motion to Refer",
-        "voted": "Nay"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "004",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H RES 5",
-        "question": "On Ordering the Previous Question",
-        "voted": "Nay"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "005",
-        "result": "Failed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H RES 5",
-        "question": "On Motion to Commit with Instructions",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "006",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H RES 5",
-        "question": "On Agreeing to the Resolution",
-        "voted": "Nay"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "007",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H RES 6",
-        "question": "On Agreeing to Title I of the Resolution",
-        "voted": "Nay"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "008",
-        "result": "Failed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H J RES 1",
-        "question": "On Motion to Recommit with Instructions",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "009",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H J RES 1",
-        "question": "On Passage",
-        "voted": "No"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "010",
-        "result": "Failed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H R 21",
-        "question": "On Motion to Recommit with Instructions",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "116",
-        "session": "1",
-        "roll": "011",
-        "result": "Passed",
-        "date": "2019-01-03T08:00:00.000Z",
-        "issue": "H R 21",
-        "question": "On Passage",
-        "voted": "Nay"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "474",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H RES 1063",
-        "question": "On Motion to Suspend the Rules and Agree",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "475",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 7318",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "476",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 7319",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "477",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 7329",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "478",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3367",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "479",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 7293",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "480",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 2276",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "481",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3031",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "482",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3191",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "483",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H CON RES 149",
-        "question": "On Motion to Suspend the Rules and Agree",
-        "voted": "Not Voting"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "484",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 4174",
-        "question": "On Motion to Suspend the Rules and Concur in the Senate Amendment",
-        "voted": "Not Voting"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "485",
-        "result": "Failed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3277",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "486",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3661",
-        "question": "On Motion to Suspend the Rules and Pass, as Amended",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "487",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 2200",
-        "question": "On Motion to Suspend the Rules and Concur in the Senate Amendment",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "488",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 1023",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "489",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 1158",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "490",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 1580",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "491",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 1862",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "492",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3247",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "493",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 512",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "494",
-        "result": "Failed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 1934",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "495",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 6287",
-        "question": "On Motion to Suspend the Rules and Concur in the Senate Amendment",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "496",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3456",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "497",
-        "result": "Failed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H R 7388",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "498",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "MOTION",
-        "question": "On Motion to Fix the Convening Time",
-        "voted": "Aye"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "499",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "H CON RES 148",
-        "question": "On Motion to Suspend the Rules and Agree",
-        "voted": "Yea"
-    },
-    {
-        "congressterm": "115",
-        "session": "2",
-        "roll": "500",
-        "result": "Passed",
-        "date": "2018-12-21T08:00:00.000Z",
-        "issue": "S 3628",
-        "question": "On Motion to Suspend the Rules and Pass",
-        "voted": "Yea"
-    }
-];
-
-

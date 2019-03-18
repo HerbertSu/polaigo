@@ -54,7 +54,6 @@ class Home extends Component {
             return (
                 <View style={styles.container}>
                     <Button title="Find My Representive" onPress={()=>this.props.setShowForm(true)}/>
-                    <Button title="Show Representative" onPress={()=>this.props.setShowHRRep(true)}/>
                     {/* <View style={styles.component}>
                         <NavigationBar componentNamesList={["Home", "Page1", "Page2"]}/>
                     </View>
@@ -67,7 +66,7 @@ class Home extends Component {
                         </View>
                     </View> */}
                 </View>
-                
+                 
             )
         }
   }
