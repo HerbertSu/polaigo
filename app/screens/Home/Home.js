@@ -29,6 +29,11 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
+//TODO: Create user login page
+//TODO: Create a test user account for demos
+//TODO: Add react-router to allow users to navigate backwards and forwards
+//TODO: Create an admin user account for adding data to database
+
 class Home extends Component {
 
     render() {
