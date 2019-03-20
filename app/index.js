@@ -1,17 +1,31 @@
 import React, { Component } from 'react';
-import { AppRegistry, View } from 'react-native';
+import { AppRegistry, View, Text } from 'react-native';
 import {Provider, connect} from 'react-redux';
+
 import Home from './screens/Home/Home';
-import { updateAddressLine1 } from './redux/reducers/locationFormReducers';
+import Login from './screens/Login/Login';
+
 import store from './redux/store';
 
 
 export default class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      showhome : false,
+    }
+  }
   render() {
       return (
         <Provider store={store}>
           <View style={{flex:1}}>
-              <Home/>
+            {
+              this.state.showhome ? (
+                <Home/>
+              ) : (
+                <Login />
+              )
+            }
           </View>
         </Provider>
     );
