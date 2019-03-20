@@ -28,7 +28,7 @@ const mapStateToProps = (state) => {
         myHRRepresentative : state.myHRRepresentativeReducer,
         isLoading : state.setShowFormReducer.isLoading,
     };
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -40,8 +40,8 @@ const mapDispatchToProps = (dispatch) => {
         updateHRRepresentative : (object) => dispatch(locationFormActions.updateHRRepresentativeAction(object)),
         setIsLoading : (boolean) => dispatch(homeActions.setIsLoadingAction(boolean)),
         setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
-    }
-}
+    };
+};
 
 
 class Form extends Component {
@@ -91,7 +91,7 @@ class Form extends Component {
     fetchHRRepresentativeFromLocation = async () => {
         //Given IP is computer's
         const server = "http://192.168.1.76:3000";
-        const endpoint = "/getRepresentativesFromLocation";
+        const endpoint = "/get-representatives-from-location";
 
         this.props.setIsLoading(true);
         this.props.setShowForm(false);
