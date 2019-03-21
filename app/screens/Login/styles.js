@@ -18,9 +18,8 @@ export const styles = StyleSheet.create({
         color: 'white',
     },
     errorMessage : {
-        alignItems : 'center',
+        alignSelf : 'center',
         fontWeight : 'bold',
         color: '#FFFFFF',
-        borderWidth : 10
     }
 })

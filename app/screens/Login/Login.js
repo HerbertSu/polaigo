@@ -76,6 +76,8 @@ class Login extends Component {
             .then(response => {
                 if(response.status !== 200){
                     this.setLoginErrorState(true);
+                    this.props.setIsLoading(false);
+                    return;
                 }
                 this.props.setIsLoggedIn(true);
                 this.setLoginErrorState(false);
@@ -124,7 +126,7 @@ class Login extends Component {
                                 Invalid username or password
                             </Text>
                         ) : (
-                            <Text>
+                            <Text style={styles.errorMessage}>
                                 &nbsp;
                             </Text>
                     )
