@@ -4,3 +4,10 @@ export const setUsernameAction = (text) => {
         payload : text
     };
 };
+
+export const setIsLoggedInAction = (boolean) => {
+    return {
+        type : 'SET_IS_LOGGED_IN',
+        payload : boolean
+    };
+};

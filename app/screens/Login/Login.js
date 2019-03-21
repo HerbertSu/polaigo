@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, KeyboardAvoidingView} from 'react-native';
+import {View, Text, KeyboardAvoidingView, ActivityIndicator} from 'react-native';
 
 import {connect} from 'react-redux';
 
@@ -8,6 +8,7 @@ import {Input, Button} from 'react-native-elements';
 import {styles} from './styles';
 
 import * as loginActions from '../../redux/actions/loginActions';
+import {setIsLoadingAction} from '../../redux/actions/homeActions';
 
 import {
     MAX_USERNAME_LENGTH,
@@ -18,12 +19,16 @@ import {
 const mapStateToProps = (state) => {
     return {
         username : state.setUsernameReducer.username,
+        isLoading : state.setIsLoadingReducer.isLoading,
+        isLoggedIn : state.setIsLoggedInReducer.isLoggedIn,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setUsername : (text) => dispatch(loginActions.setUsernameAction(text)),
+        setIsLoading : (boolean) => dispatch(setIsLoadingAction(boolean)),
+        setIsLoggedIn : (boolean) => dispatch(loginActions.setIsLoggedInAction(boolean)),
     };
 };
 
@@ -32,6 +37,7 @@ class Login extends Component {
         super(props);
         this.state = {
             password : '',
+            loginErrorState : false,
         };
     };
 
@@ -41,16 +47,43 @@ class Login extends Component {
         });
     };
 
+    setLoginErrorState = (boolean) => {
+        this.setState({
+            loginErrorState : boolean
+        });
+    };
+
     setUsername = (event) => {
         this.props.setUsername(event);
     };
 
-    login = () => {
+    login = async () => {
+        const server = "http://192.168.1.76:3000";
+        const endpoint = "/login";
+        
         if(this.props.username !== '' && this.state.password !== ''){
-            
+            this.props.setIsLoading(true);
+            await fetch(`${server}${endpoint}`, {
+                method : 'POST',
+                body : JSON.stringify({
+                    username : this.props.username,
+                    password : this.state.password
+                }),
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            })
+            .then(response => {
+                if(response.status !== 200){
+                    this.setLoginErrorState(true);
+                }
+                this.props.setIsLoggedIn(true);
+                this.setLoginErrorState(false);
+                this.props.setIsLoading(false);
+            })
         }else{
-            throw new Error("Username or Password cannot be empty.");
-        }
+            this.setLoginErrorState(true);
+        };
     };
 
     render(){
@@ -62,6 +95,7 @@ class Login extends Component {
                         name="username" 
                         maxLength={MAX_USERNAME_LENGTH} 
                         value={this.props.username} 
+                        autoCapitalize='none'
                         placeholder='' 
                         onChangeText={this.setUsername}
                         inputStyle={styles.input}
@@ -77,9 +111,24 @@ class Login extends Component {
                         secureTextEntry={true}
                         inputStyle={styles.input}
                     />
-                    <Button 
-                        title='Login' onPress={()=>console.log(this.state.password)}
-                    />
+                    {this.props.isLoading ? (
+                            <Button loading/>
+                        ) : (
+                            <Button 
+                                title='Login' onPress={()=>this.login()}
+                            />
+                    )
+                    }
+                    {this.state.loginErrorState ? (
+                            <Text style={styles.errorMessage}>
+                                Invalid username or password
+                            </Text>
+                        ) : (
+                            <Text>
+                                &nbsp;
+                            </Text>
+                    )
+                    }
                 </View>
                
             </KeyboardAvoidingView>

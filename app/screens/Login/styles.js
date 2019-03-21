@@ -15,6 +15,12 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     input:{
-        color: 'white'
+        color: 'white',
     },
+    errorMessage : {
+        alignItems : 'center',
+        fontWeight : 'bold',
+        color: '#FFFFFF',
+        borderWidth : 10
+    }
 })

@@ -22,6 +22,7 @@ import {
 
 import {
     setUsername,
+    setIsLoggedIn,
 } from './loginReducers';
 
 export default combineReducers({
@@ -37,4 +38,5 @@ export default combineReducers({
     setShowVotesReducer : setShowVotes,
     updateHRRepVoteHistoryReducer : updateHRRepVoteHistory,
     setUsernameReducer : setUsername,
+    setIsLoggedInReducer : setIsLoggedIn,
 });
