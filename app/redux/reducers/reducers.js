@@ -20,6 +20,11 @@ import {
     updateHRRepVoteHistory,
 } from './representativeReducers';
 
+import {
+    setUsername,
+    setIsLoggedIn,
+} from './loginReducers';
+
 export default combineReducers({
     addressLine1Reducer : updateAddressLine1,
     addressLine2Reducer : updateAddressLine2,
@@ -32,4 +37,6 @@ export default combineReducers({
     setShowHRRepReducer : setShowHRRep,
     setShowVotesReducer : setShowVotes,
     updateHRRepVoteHistoryReducer : updateHRRepVoteHistory,
+    setUsernameReducer : setUsername,
+    setIsLoggedInReducer : setIsLoggedIn,
 });
