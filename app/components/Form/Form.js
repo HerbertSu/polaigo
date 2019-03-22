@@ -133,12 +133,60 @@ class Form extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Input label="Address Line 1" name="addressLine1" autoCapitalize="words" maxLength={MAX_ADDRESS_LENGTH} value={this.props.addressline1} placeholder='1234 ABC Street' onChangeText={this.setAddressLine1}/>
-                <Input label="Address Line 2" name="addressLine2" autoCapitalize="words" maxLength={MAX_ADDRESS_LENGTH} value={this.props.addressline2} placeholder='Apt. 1' onChangeText={this.setAddressLine2}/>
-                <Input label="City" name="city" autoCapitalize="words" maxLength={MAX_CITY_LENGTH} value={this.props.city} placeholder='' onChangeText={this.setCity}/>
-                <Input label="State" name="state" autoCapitalize="words" maxLength={MAX_STATE_LENGTH} value={this.props.state} placeholder='' onChangeText={this.setSt}/>
-                <Input label="5-Digit Zip Code" name="zipCode" maxLength={MAX_ZIP_CODE_LENGTH} keyboardType='numeric' value={this.props.zipCode} placeholder='' onChangeText={this.setZipCode}/>
-                <Button title="Submit" onPress={this.fetchHRRepresentativeFromLocation}/>
+                <Input 
+                    label="Address Line 1" 
+                    name="addressLine1" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_ADDRESS_LENGTH} 
+                    value={this.props.addressline1} 
+                    placeholder='1234 ABC Street' 
+                    onChangeText={this.setAddressLine1}
+                    inputStyle={styles.input}
+                />
+                <Input 
+                    label="Address Line 2" 
+                    name="addressLine2" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_ADDRESS_LENGTH} 
+                    value={this.props.addressline2} 
+                    placeholder='Apt. 1' 
+                    onChangeText={this.setAddressLine2}
+                    inputStyle={styles.input}
+                />
+                <Input 
+                    label="City" 
+                    name="city" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_CITY_LENGTH} 
+                    value={this.props.city} 
+                    placeholder='' 
+                    onChangeText={this.setCity}
+                    inputStyle={styles.input}
+                />
+                <Input 
+                    label="State" 
+                    name="state" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_STATE_LENGTH} 
+                    value={this.props.state} 
+                    placeholder='' 
+                    onChangeText={this.setSt}
+                    inputStyle={styles.input}
+                />
+                <Input 
+                    label="5-Digit Zip Code" 
+                    name="zipCode" 
+                    maxLength={MAX_ZIP_CODE_LENGTH} 
+                    keyboardType='numeric' 
+                    value={this.props.zipCode} 
+                    placeholder='' 
+                    onChangeText={this.setZipCode}
+                    inputStyle={styles.input}
+                />
+                <Button 
+                    title="Submit" 
+                    onPress={this.fetchHRRepresentativeFromLocation}
+                />
             </View>
         );
     } 
