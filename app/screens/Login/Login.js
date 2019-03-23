@@ -36,7 +36,7 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
-            password : '',
+            password : 'test_user_password123',
             loginErrorState : false,
         };
     };
