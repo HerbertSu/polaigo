@@ -11,7 +11,8 @@ import { MAX_ADDRESS_LENGTH,
     MAX_STATE_LENGTH } from '../../constants/locationFormConstants';
 
 import {
-    EMPTY_OR_WHITESPACE
+    EMPTY_OR_WHITESPACE,
+    CONTAINS_ALPHANUMERICS_SPACES_AND_PERIOD,
 } from '../../constants/regex';
 
 import * as locationFormActions from '../../redux/actions/locationFormActions';
@@ -40,15 +41,33 @@ const mapDispatchToProps = (dispatch) => {
         updateHRRepresentative : (object) => dispatch(locationFormActions.updateHRRepresentativeAction(object)),
         setIsLoading : (boolean) => dispatch(homeActions.setIsLoadingAction(boolean)),
         setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
+        
     };
 };
 
 
 class Form extends Component {
-    
+    constructor(props){
+        super(props);
+        this.state = {
+            addressLine1Error : {isError : false, errorMessage : ''},
+            cityError : {isError : false, errorMessage : ''},
+            zipCodeError : {isError : false, errorMessage : ''},
+            stateError : {isError : false, errorMessage : ''},
+            generalError : {isError : false, errorMessage : ''},
+        };
+    };
+
     setAddressLine1 = (event) =>{
         this.props.updateAddressLine1(event);
-    }
+        
+        if(
+            CONTAINS_ALPHANUMERICS_SPACES_AND_PERIOD.test(event) &&  
+            !EMPTY_OR_WHITESPACE.test(event)
+        ){
+            this.setError('addressLine1Error', false, '');
+        };
+    };
 
     setAddressLine2 = (event) =>{
         this.props.updateAddressLine2(event);
@@ -56,6 +75,13 @@ class Form extends Component {
 
     setCity = (event) =>{
         this.props.updateCity(event);
+
+        if(
+            CONTAINS_ALPHANUMERICS_SPACES_AND_PERIOD.test(event) &&  
+            !EMPTY_OR_WHITESPACE.test(event)
+        ){
+            this.setError('cityError', false, '');
+        };
     }
     
     setZipCode = (event) =>{
@@ -64,46 +90,40 @@ class Form extends Component {
 
     setSt = (event) =>{
         this.props.updateState(event);
+        if(
+            CONTAINS_ALPHANUMERICS_SPACES_AND_PERIOD.test(event) &&  
+            !EMPTY_OR_WHITESPACE.test(event)
+        ){
+            this.setError('stateError', false, '');
+        };
     }
 
-    //BUG: Detects spaces even if values are given, e.g. 'El Cerrito' throws an error. Need EMPTY and JUST whitespaces
-    // checkAddressLine1Entry = () => {
-    //     if(EMPTY_OR_WHITESPACE.test(this.props.addressLine1)){
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
-    // checkCityEntry = () => {
-    //     if(EMPTY_OR_WHITESPACE.test(this.props.city)){
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
-    // checkStateEntry = () => {
-    //     if(EMPTY_OR_WHITESPACE.test(this.props.st)){
-    //         return false;
-    //     }
-    //     return true;
-    // }   
-
     fetchHRRepresentativeFromLocation = async () => {
+        if( EMPTY_OR_WHITESPACE.test(this.props.addressLine1)){
+            this.checkIfEmptyInput(this.props.addressLine1, "addressLine1Error", "Please enter a valid address");
+        }
+        if(EMPTY_OR_WHITESPACE.test(this.props.city)){
+            this.checkIfEmptyInput(this.props.city, "cityError", "Please enter a valid city")
+        }  
+        if(EMPTY_OR_WHITESPACE.test(this.props.st)){
+            this.checkIfEmptyInput(this.props.st, "stateError", "Please enter a valid state")
+        }
+        
+        if(
+            this.state.addressLine1Error.isError || 
+            this.state.cityError.isError ||
+            this.state.stateError.isError
+        ){
+            return(
+                this.setError('generalError', true, "Invalid address, please check syntax")
+            );
+        };
+
         //Given IP is computer's
         const server = "http://192.168.1.76:3000";
         const endpoint = "/get-representatives-from-location";
 
         this.props.setIsLoading(true);
-        this.props.setShowForm(false);
-
-        // if(
-        //     this.checkAddressLine1Entry() ||
-        //     this.checkCityEntry() ||
-        //     this.checkStateEntry()
-        // ){
-        //     console.log("Empty entries detected.")
-        //     return;
-        // }
 
         return fetch(`${server}${endpoint}`, {
             method : 'POST',
@@ -120,25 +140,148 @@ class Form extends Component {
         })
         .then(response => response.json())
         .then(response => {
-            this.props.updateHRRepresentative(response);
-            this.props.setIsLoading(false);
-            this.props.setShowHRRep(true);
+            if(response["error"] === "Invalid address"){
+                this.setError('generalError', true, "Invalid address, please check syntax and re-enter");
+                this.props.setIsLoading(false);
+            } else {
+                this.props.updateHRRepresentative(response);
+                this.props.setIsLoading(false);
+                this.props.setShowForm(false);
+                this.props.setShowHRRep(true);
+            };
         })
         .catch(error => {
             console.log("Error in fetchHRRepresentativeFromLocation in Form.js.", error);
             throw error;
-        })
-    }
+        });
+    };
+    
+    setError = (stateVariable, isError, message) => {
+        this.setState({
+            [stateVariable] : {
+                ...this.state[stateVariable], 
+                isError : isError, 
+                errorMessage : message
+            }
+        });
+    };
+
+    checkIfEmptyInput = (state, stateError, message) => {
+        if( 
+            !CONTAINS_ALPHANUMERICS_SPACES_AND_PERIOD.test(state) ||  
+            EMPTY_OR_WHITESPACE.test(state)
+        ){
+            this.setError(stateError, true, message);
+        }else{
+            this.setError(stateError, false, '');
+        };
+    };
 
     render() {
         return (
             <View style={styles.container}>
-                <Input label="Address Line 1" name="addressLine1" autoCapitalize="words" maxLength={MAX_ADDRESS_LENGTH} value={this.props.addressline1} placeholder='1234 ABC Street' onChangeText={this.setAddressLine1}/>
-                <Input label="Address Line 2" name="addressLine2" autoCapitalize="words" maxLength={MAX_ADDRESS_LENGTH} value={this.props.addressline2} placeholder='Apt. 1' onChangeText={this.setAddressLine2}/>
-                <Input label="City" name="city" autoCapitalize="words" maxLength={MAX_CITY_LENGTH} value={this.props.city} placeholder='' onChangeText={this.setCity}/>
-                <Input label="State" name="state" autoCapitalize="words" maxLength={MAX_STATE_LENGTH} value={this.props.state} placeholder='' onChangeText={this.setSt}/>
-                <Input label="5-Digit Zip Code" name="zipCode" maxLength={MAX_ZIP_CODE_LENGTH} keyboardType='numeric' value={this.props.zipCode} placeholder='' onChangeText={this.setZipCode}/>
-                <Button title="Submit" onPress={this.fetchHRRepresentativeFromLocation}/>
+                <Input 
+                    label="Address Line 1" 
+                    name="addressLine1" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_ADDRESS_LENGTH} 
+                    value={this.props.addressline1} 
+                    placeholder='1234 ABC Street' 
+                    onChangeText={this.setAddressLine1}
+                    inputStyle={styles.input}
+                    onBlur={()=>this.checkIfEmptyInput(this.props.addressLine1, "addressLine1Error", "Please enter a valid address")}                    
+                />
+                {this.state.addressLine1Error.isError !== false? (
+                        <Text style={styles.errorMessage}>
+                            {this.state.addressLine1Error.errorMessage}
+                        </Text>
+                    ) : (
+                        <Text style={styles.errorMessage}>
+                            &nbsp;
+                        </Text>
+                )
+                }
+                {/* <Input 
+                    label="Address Line 2" 
+                    name="addressLine2" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_ADDRESS_LENGTH} 
+                    value={this.props.addressline2} 
+                    placeholder='Apt. 1' 
+                    onChangeText={this.setAddressLine2}
+                    inputStyle={styles.input}
+                /> */}
+                <Input 
+                    label="City" 
+                    name="city" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_CITY_LENGTH} 
+                    value={this.props.city} 
+                    placeholder='' 
+                    onChangeText={this.setCity}
+                    inputStyle={styles.input}
+                    onBlur={()=>this.checkIfEmptyInput(this.props.city, "cityError", "Please enter a valid city")}
+                />
+                {this.state.cityError.isError !== false ? (
+                        <Text style={styles.errorMessage}>
+                            {this.state.cityError.errorMessage}
+                        </Text>
+                    ) : (
+                        <Text style={styles.errorMessage}>
+                            &nbsp;
+                        </Text>
+                )
+                }
+                <Input 
+                    label="State" 
+                    name="state" 
+                    autoCapitalize="words" 
+                    maxLength={MAX_STATE_LENGTH} 
+                    value={this.props.state} 
+                    placeholder='' 
+                    onChangeText={this.setSt}
+                    inputStyle={styles.input}
+                    onBlur={()=>this.checkIfEmptyInput(this.props.st, "stateError", "Please enter a valid state")}
+                />
+                {this.state.stateError.isError !== false ? (
+                        <Text style={styles.errorMessage}>
+                            {this.state.stateError.errorMessage}
+                        </Text>
+                    ) : (
+                        <Text style={styles.errorMessage}>
+                            &nbsp;
+                        </Text> 
+                )
+                }
+                {/* <Input 
+                    label="5-Digit Zip Code" 
+                    name="zipCode" 
+                    maxLength={MAX_ZIP_CODE_LENGTH} 
+                    keyboardType='numeric' 
+                    value={this.props.zipCode} 
+                    placeholder='' 
+                    onChangeText={this.setZipCode}
+                    inputStyle={styles.input}
+                /> */}
+                {this.props.isLoading ? (
+                    <Button loading/>
+                ) : (
+                    <Button 
+                    title="Submit" 
+                    onPress={this.fetchHRRepresentativeFromLocation}
+                />
+                )}
+
+                {this.state.generalError.isError !== false? (
+                        <Text style={styles.errorMessage}>
+                            {this.state.generalError.errorMessage}
+                        </Text>
+                    ) : (
+                        <Text style={styles.errorMessage}>
+                            &nbsp;
+                        </Text>
+                )
+                }
             </View>
         );
     } 
