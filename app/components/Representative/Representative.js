@@ -9,6 +9,10 @@ import * as homeActions from '../../redux/actions/homeActions';
 
 import {dateify} from '../../../lib/scripts';
 
+import {
+    SERVER
+} from '../../constants/connections';
+
 import {styles} from './styles';
 
 const mapStateToProps = (state) => {
@@ -53,13 +57,12 @@ const votes = (voteHistory, firstname, lastname) => {
 
 class Representative extends Component {
     fetchHRRepresentativeVoteHistoryFull = async (bioguideid) => {
-        const server = "http://192.168.1.76:3000";
         const endpoint = "/get-hr-rep-vote-history-active-full";
         
         this.props.setIsLoading(true);
         this.props.setShowHRRep(false);
     
-        return fetch(`${server}${endpoint}`, {
+        return fetch(`${SERVER}${endpoint}`, {
             method : 'POST',
             body : JSON.stringify({
                 bioguideid : this.props.myHRRepresentative.bioguideid

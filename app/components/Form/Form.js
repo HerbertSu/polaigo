@@ -11,6 +11,10 @@ import { MAX_ADDRESS_LENGTH,
     MAX_STATE_LENGTH } from '../../constants/locationFormConstants';
 
 import {
+    SERVER
+} from '../../constants/connections';
+
+import {
     EMPTY_OR_WHITESPACE,
     CONTAINS_ALPHANUMERICS_SPACES_AND_PERIOD,
 } from '../../constants/regex';
@@ -119,13 +123,11 @@ class Form extends Component {
             );
         };
 
-        //Given IP is computer's
-        const server = "http://192.168.1.76:3000";
         const endpoint = "/get-representatives-from-location";
 
         this.props.setIsLoading(true);
 
-        return fetch(`${server}${endpoint}`, {
+        return fetch(`${SERVER}${endpoint}`, {
             method : 'POST',
             body : JSON.stringify({
                 addressLine1 : this.props.addressLine1,

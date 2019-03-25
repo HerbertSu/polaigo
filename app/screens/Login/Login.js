@@ -15,6 +15,10 @@ import {
     MAX_PASSWORD_LENGTH,
 } from '../../constants/loginConstants';
 
+import {
+    SERVER
+} from '../../constants/connections';
+
 
 const mapStateToProps = (state) => {
     return {
@@ -58,12 +62,11 @@ class Login extends Component {
     };
 
     login = async () => {
-        const server = "http://192.168.1.76:3000";
         const endpoint = "/login";
         
         if(this.props.username !== '' && this.state.password !== ''){
             this.props.setIsLoading(true);
-            await fetch(`${server}${endpoint}`, {
+            await fetch(`${SERVER}${endpoint}`, {
                 method : 'POST',
                 body : JSON.stringify({
                     username : this.props.username,
