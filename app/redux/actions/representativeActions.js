@@ -11,3 +11,10 @@ export const updateHRRepVoteHistoryAction = (voteHistoryArray) => {
         payload : voteHistoryArray
     };
 };
+
+export const clearHRRepVoteHistoryAction = () => {
+    return {
+        type : 'CLEAR_HR_REP_VOTE_HISTORY',
+    };
+};
+

@@ -188,7 +188,6 @@ class Form extends Component {
                     autoCapitalize="words" 
                     maxLength={MAX_ADDRESS_LENGTH} 
                     value={this.props.addressline1} 
-                    placeholder='1234 ABC Street' 
                     onChangeText={this.setAddressLine1}
                     inputStyle={styles.input}
                     onBlur={()=>this.checkIfEmptyInput(this.props.addressLine1, "addressLine1Error", "Please enter a valid address")}                    
@@ -219,7 +218,6 @@ class Form extends Component {
                     autoCapitalize="words" 
                     maxLength={MAX_CITY_LENGTH} 
                     value={this.props.city} 
-                    placeholder='' 
                     onChangeText={this.setCity}
                     inputStyle={styles.input}
                     onBlur={()=>this.checkIfEmptyInput(this.props.city, "cityError", "Please enter a valid city")}
@@ -240,7 +238,6 @@ class Form extends Component {
                     autoCapitalize="words" 
                     maxLength={MAX_STATE_LENGTH} 
                     value={this.props.state} 
-                    placeholder='' 
                     onChangeText={this.setSt}
                     inputStyle={styles.input}
                     onBlur={()=>this.checkIfEmptyInput(this.props.st, "stateError", "Please enter a valid state")}

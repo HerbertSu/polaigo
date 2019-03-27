@@ -27,6 +27,15 @@ export const styles = StyleSheet.create({
     },
     voted : {
         fontWeight : 'bold',
+    },
+    buttonContainer : {
+        flexDirection : 'row',
+        justifyContent: 'space-between'
+    },
+    emptyLine : {
+        alignSelf : 'center',
+        fontWeight : 'bold',
+        color: '#FFFFFF',
     }
 })
 

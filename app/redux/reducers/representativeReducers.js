@@ -14,6 +14,9 @@ export const updateHRRepVoteHistory = (state = {representativeHRVoteHistory : []
         case 'UPDATE_HR_REP_VOTE_HISTORY' : {
             return {...state, representativeHRVoteHistory : action.payload};
         }
+        case 'CLEAR_HR_REP_VOTE_HISTORY' : {
+            return {...state, representativeHRVoteHistory : []};
+        }
         default : {
             return state;
         };
