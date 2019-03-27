@@ -13,6 +13,7 @@ import Body from '../../components/Body/Body';
 import Form from '../../components/Form/Form';
 import Representative from '../../components/Representative/Representative';
 import Login from '../Login/Login';
+import LogoutButton from '../../components/LogoutButton/LogoutButton';
 
 const mapStateToProps = (state) => {
     return {
@@ -48,6 +49,7 @@ class Home extends Component {
             return (
                 <View style={styles.container}>
                     <Form setShowHRRep={this.props.setShowHRRep} setShowForm={this.props.setShowForm} showForm={this.props.showForm}/>
+                    <LogoutButton/>
                 </View>
             );
         } else if(this.props.isLoading && this.props.isLoggedIn){
@@ -60,12 +62,14 @@ class Home extends Component {
             return (
                 <View style={styles.container}>
                     <Representative/>
+                    <LogoutButton/>
                 </View>
             )
         } else {
             return (
                 <View style={styles.container}>
                     <Button title="Find My Representive" onPress={()=>this.props.setShowForm(true)}/>
+                    <LogoutButton/>
                     {/* <View style={styles.component}>
                         <NavigationBar componentNamesList={["Home", "Page1", "Page2"]}/>
                     </View>
