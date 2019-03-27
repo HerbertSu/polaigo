@@ -39,3 +39,9 @@ export const updateHRRepresentativeAction = (object) => {
         payload : object
     };
 };
+
+export const clearHRRepresentativeAction = () => {
+    return {
+        type : 'CLEAR_HR_REPRESENTATIVE',
+    };
+};

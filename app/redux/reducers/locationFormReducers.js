@@ -56,8 +56,12 @@ export const updateHRRepresentative = (state = initialHRRepresentativeState, act
     switch(action.type){
         case 'UPDATE_HR_REPRESENTATIVE' : {
             return {...state, ...action.payload, empty: false};
-        } default : {
-            return state;
+        } 
+        case 'CLEAR_HR_REPRESENTATIVE' : {
+            return {...state, ...initialHRRepresentativeState};
         }
-    }
-}
+        default : {
+            return state;
+        };
+    };
+};

@@ -5,6 +5,7 @@ import { FlatList, View, Image, Text, Dimensions} from 'react-native';
 import { Button, ListItem } from 'react-native-elements';
 
 import LogoutButton from '../LogoutButton/LogoutButton';
+import FindAnotherRepresentativeButton from '../FindAnotherRepresentativeButton/FindAnotherRepresentativeButton';
 
 import * as representativeActions from '../../redux/actions/representativeActions';
 import * as homeActions from '../../redux/actions/homeActions';
@@ -109,15 +110,24 @@ class Representative extends Component {
                     <Text style={styles.text}>
                         Your Representative is {rep.firstname} {rep.lastname} [{rep.party}].
                     </Text>
-
+        
                     <Button title={`Retrieve ${rep.lastname}'s Vote History`} onPress={() => this.fetchHRRepresentativeVoteHistoryFull(this.props.myHRRepresentative.bioguideid)}/>
                     
+                    <Text style={styles.emptyLine}>
+                        &nbsp;
+                    </Text>
+                    
+                    <FindAnotherRepresentativeButton /> 
                 </View>
             );
         } else if (this.props.showVotes){
             return (    
                 <View>
-                    <LogoutButton/>
+                    <View style={styles.buttonContainer}>
+                        <FindAnotherRepresentativeButton/>
+                        <LogoutButton/>
+                    </View>
+                    
                     <FlatList  
                         data={this.props.representativeHRVoteHistory}
                         renderItem={({item}) => {
