@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, Text, KeyboardAvoidingView} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {styles} from './styles';
@@ -181,9 +181,15 @@ class Form extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}>
+                <Text style={styles.enterAddressText}>
+                    Enter an address to find its associated House representative!
+                </Text>
+                <Text>
+                    &nbsp;
+                </Text>
                 <Input 
-                    label="Address Line 1" 
+                    label="Address Line" 
                     name="addressLine1" 
                     autoCapitalize="words" 
                     maxLength={MAX_ADDRESS_LENGTH} 
@@ -281,7 +287,7 @@ class Form extends Component {
                         </Text>
                 )
                 }
-            </View>
+            </KeyboardAvoidingView>
         );
     } 
 }
