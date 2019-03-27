@@ -25,7 +25,7 @@ import {
     setIsLoggedIn,
 } from './loginReducers';
 
-export default combineReducers({
+const appReducer = combineReducers({
     addressLine1Reducer : updateAddressLine1,
     addressLine2Reducer : updateAddressLine2,
     cityReducer : updateCity,
@@ -40,3 +40,13 @@ export default combineReducers({
     setUsernameReducer : setUsername,
     setIsLoggedInReducer : setIsLoggedIn,
 });
+
+const rootReducer = (state, action) => {
+    if (action.type === 'USER_LOGOUT'){
+        state = undefined;
+    };
+
+    return appReducer(state, action);
+};
+
+export default rootReducer;
