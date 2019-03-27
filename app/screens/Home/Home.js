@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, } from 'react-native';
 
 import {connect} from 'react-redux';
 
@@ -32,16 +32,25 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-//TODO: Add react-router to allow users to navigate backwards and forwards
-//TODO: Create an admin user account for adding data to database
-
 class Home extends Component {
 
     render() {
         if(!this.props.isLoggedIn){
             return(
                 <View style={styles.container}>
-                    <Login/>
+                    <View style={styles.welcomeContainer}>
+                        <Text style={styles.welcomeText}>
+                            Welcome to
+                        </Text>
+                        <Text style={styles.logoText}>
+                            Polaigo
+                        </Text>
+                    </View>
+                    
+                    <View style={styles.loginContainer}>
+                        <Login/>
+                    </View>
+                    
                 </View>
             );
         }
@@ -67,9 +76,17 @@ class Home extends Component {
             )
         } else {
             return (
-                <View style={styles.container}>
-                    <Button title="Find My Representive" onPress={()=>this.props.setShowForm(true)}/>
-                    <LogoutButton/>
+                <View style={styles.findRepresentativesContainer}>
+                    
+                    <View style={styles.findRepresentativesButton}>
+                        <Button title="Find My Representive" onPress={()=>this.props.setShowForm(true)}/>
+                    </View>
+
+                    <Text >
+                        &nbsp;
+                    </Text>
+
+                     <LogoutButton/>
                     {/* <View style={styles.component}>
                         <NavigationBar componentNamesList={["Home", "Page1", "Page2"]}/>
                     </View>
