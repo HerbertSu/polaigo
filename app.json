@@ -1,11 +1,14 @@
 {
   "expo": {
-    "name": "AwesomeProject",
-    "description": "This project is really great.",
-    "slug": "AwesomeProject",
+    "name": "poligo_test",
+    "description": "This is a test version of PoliGo, a new way track one's opinions on Congressional bills, resolutions, and legislators to make more informed decisions come election time.",
+    "slug": "poligo_test",
     "privacy": "public",
     "sdkVersion": "31.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +25,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "githubUrl": "https://github.com/HerbertSu/polaigo"
   }
 }

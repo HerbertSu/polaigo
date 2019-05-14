@@ -15,6 +15,8 @@ import Representative from '../../components/Representative/Representative';
 import Login from '../Login/Login';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 
+import { APP_NAME } from '../../constants/appName';
+
 const mapStateToProps = (state) => {
     return {
         showForm : state.setShowFormReducer.showForm,
@@ -43,7 +45,7 @@ class Home extends Component {
                             Welcome to
                         </Text>
                         <Text style={styles.logoText}>
-                            Polaigo
+                            {APP_NAME}
                         </Text>
                     </View>
                     

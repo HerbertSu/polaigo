@@ -139,8 +139,8 @@ class Representative extends Component {
                                         <Text>Vote Issue : {item.issue} </Text>
                                         <Text>Vote Question : {item.question} </Text>
                                         <Text>Vote Date : {`${date.month}/${date.day}/${date.year}`} </Text>
-                                        <Text> Rep. {this.props.myHRRepresentative.lastname} voted 
-                                            <Text style={styles.voted}>
+                                        <Text>Rep. {this.props.myHRRepresentative.lastname} voted 
+                                            <Text style={styles.voted}> 
                                                 {` ${item.voted}`}
                                             </Text>.
                                         </Text>
