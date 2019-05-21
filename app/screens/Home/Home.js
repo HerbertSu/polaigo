@@ -9,7 +9,6 @@ import {styles} from './styles';
 import { Button } from 'react-native-elements';
 
 import NavigationBar from '../../components/NavigationBar/NavigationBar';
-import Body from '../../components/Body/Body';
 import Form from '../../components/Form/Form';
 import Representative from '../../components/Representative/Representative';
 import Login from '../Login/Login';
