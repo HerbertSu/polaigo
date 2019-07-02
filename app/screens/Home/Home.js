@@ -14,6 +14,8 @@ import Representative from '../../components/Representative/Representative';
 import Login from '../Login/Login';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 
+
+// TODO: Use react-router-native to route your app pages/screens.
 const mapStateToProps = (state) => {
     return {
         showForm : state.setShowFormReducer.showForm,
@@ -52,8 +54,7 @@ class Home extends Component {
                     
                 </View>
             );
-        }
-        else if(this.props.showForm){
+        } else if(this.props.showForm){
             return (
                 <View style={styles.container}>
                     <Form setShowHRRep={this.props.setShowHRRep} setShowForm={this.props.setShowForm} showForm={this.props.showForm}/>
