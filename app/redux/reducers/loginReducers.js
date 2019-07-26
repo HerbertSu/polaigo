@@ -19,3 +19,14 @@ export const setIsLoggedIn = (state = {isLoggedIn : false}, action) => {
         };
     };
 };
+
+export const setNewUser = (state = {newUser : false}, action) => {
+    switch(action.type){
+        case 'SET_NEW_USER' : {
+            return {...state, newUser : action.payload};
+        }
+        default : {
+            return state;
+        };
+    };
+};

@@ -25,6 +25,7 @@ const mapStateToProps = (state) => {
         username : state.setUsernameReducer.username,
         isLoading : state.setIsLoadingReducer.isLoading,
         isLoggedIn : state.setIsLoggedInReducer.isLoggedIn,
+        newUser : state.setNewUserReducer.newUser,
     };
 };
 
@@ -33,6 +34,7 @@ const mapDispatchToProps = (dispatch) => {
         setUsername : (text) => dispatch(loginActions.setUsernameAction(text)),
         setIsLoading : (boolean) => dispatch(setIsLoadingAction(boolean)),
         setIsLoggedIn : (boolean) => dispatch(loginActions.setIsLoggedInAction(boolean)),
+        setNewUser : (boolean) => dispatch(loginActions.setNewUserAction(boolean)),
     };
 };
 
@@ -134,6 +136,7 @@ class Login extends Component {
                             </Text>
                     )
                     }
+                    <Button title="New User" onPress={()=>this.props.setNewUser(true)}/>
                 </View>
                
             </KeyboardAvoidingView>

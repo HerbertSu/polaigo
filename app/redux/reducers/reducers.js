@@ -23,6 +23,7 @@ import {
 import {
     setUsername,
     setIsLoggedIn,
+    setNewUser,
 } from './loginReducers';
 
 const appReducer = combineReducers({
@@ -39,6 +40,7 @@ const appReducer = combineReducers({
     updateHRRepVoteHistoryReducer : updateHRRepVoteHistory,
     setUsernameReducer : setUsername,
     setIsLoggedInReducer : setIsLoggedIn,
+    setNewUserReducer : setNewUser,
 });
 
 const rootReducer = (state, action) => {

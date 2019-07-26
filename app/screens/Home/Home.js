@@ -21,6 +21,7 @@ const mapStateToProps = (state) => {
         isLoading : state.setIsLoadingReducer.isLoading,
         showHRRep : state.setShowHRRepReducer.showHRRep,
         isLoggedIn : state.setIsLoggedInReducer.isLoggedIn,
+        newUser : state.setNewUserReducer.newUser,
     };
 }
 
@@ -28,14 +29,15 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
         setShowHRRep : (boolean) => dispatch(homeActions.setShowHRRepAction(boolean)),
-        setIsLoggedIn : (boolean) => dispatch(setIsLoggedInAction(boolean)),
+        // setIsLoggedIn : (boolean) => dispatch(setIsLoggedInAction(boolean)),
+        setNewUser : (boolean) => dispatch()
     }
 }
 
 class Home extends Component {
-
+    
     render() {
-        if(!this.props.isLoggedIn){
+        if(!this.props.isLoggedIn && !this.props.newUser){
             return(
                 <View style={styles.container}>
                     <View style={styles.welcomeContainer}>
@@ -74,7 +76,15 @@ class Home extends Component {
                     <LogoutButton/>
                 </View>
             )
-        } else {
+        } else if (this.props.newUser){
+            return(
+                <View style={styles.container}>
+                    <Text style={{display: "flex", justifyContent: 'center', alignItems: 'center'}}>
+                        Hiya!
+                    </Text>
+                </View>
+            )
+        }else {
             return (
                 <View style={styles.findRepresentativesContainer}>
                     

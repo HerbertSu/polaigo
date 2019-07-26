@@ -11,3 +11,10 @@ export const setIsLoggedInAction = (boolean) => {
         payload : boolean
     };
 };
+
+export const setNewUserAction = (boolean) => {
+    return {
+        type : 'SET_NEW_USER',
+        payload : boolean,
+    };
+};
