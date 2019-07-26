@@ -32,6 +32,10 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
+// TODO: Change screen navigation logic to switch statements(?) for readability.
+    //Check out react-navigation
+
+
 class Home extends Component {
 
     render() {
@@ -50,6 +54,8 @@ class Home extends Component {
                     <View style={styles.loginContainer}>
                         <Login/>
                     </View>
+
+                    <Button title="Change Page" onPress={()=>this.props.history.push('/newScreen')} />
                     
                 </View>
             );
