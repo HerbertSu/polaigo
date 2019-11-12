@@ -4,7 +4,7 @@
     "description": "This is a test version of PoliGo, a new way track one's opinions on Congressional bills, resolutions, and legislators to make more informed decisions come election time.",
     "slug": "poligo_test",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
