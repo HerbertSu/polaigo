@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setShowForm : (boolean) => dispatch(homeActions.setShowFormAction(boolean)),
         setShowHRRep : (boolean) => dispatch(homeActions.setShowHRRepAction(boolean)),
-        // setIsLoggedIn : (boolean) => dispatch(setIsLoggedInAction(boolean)),
+        setIsLoggedIn : (boolean) => dispatch(setIsLoggedInAction(boolean)),
         setNewUser : (boolean) => dispatch()
     }
 }
@@ -79,7 +79,7 @@ class Home extends Component {
         } else if (this.props.newUser){
             return(
                 <View style={styles.container}>
-                    <Text style={{display: "flex", justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         Hiya!
                     </Text>
                 </View>
