@@ -13,6 +13,7 @@ import Body from '../../components/Body/Body';
 import Form from '../../components/Form/Form';
 import Representative from '../../components/Representative/Representative';
 import Login from '../Login/Login';
+import NewUser from '../NewUser';
 import LogoutButton from '../../components/LogoutButton/LogoutButton';
 
 const mapStateToProps = (state) => {
@@ -79,9 +80,7 @@ class Home extends Component {
         } else if (this.props.newUser){
             return(
                 <View style={styles.container}>
-                    <Text style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        Hiya!
-                    </Text>
+                    <NewUser/>
                 </View>
             )
         }else {
